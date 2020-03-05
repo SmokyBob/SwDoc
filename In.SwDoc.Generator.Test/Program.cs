@@ -15,8 +15,10 @@ namespace In.SwDoc.Generator.Test
             XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
             var generator = DocGeneratorFactory.Get();
             var data = File.ReadAllText("test.json");
-            var output = generator.ConvertJsonToPdf(data);
+            //var output = generator.ConvertJsonToFormat(data, false,"pdf");
+            var output = generator.ConvertJsonToFormat(data, false,"html");
             Console.WriteLine(output);
+            Console.ReadLine();
         }
     }
 }

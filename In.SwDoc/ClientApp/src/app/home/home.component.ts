@@ -24,11 +24,13 @@ export class HomeComponent {
     private formBuilder: FormBuilder) {
     this.urlForm = this.formBuilder.group({
       url: '',
-      openApi: false
+      openApi: false,
+      format: ''
     });
     this.specForm = this.formBuilder.group({
       text: '',
-      openApi: false
+      openApi: false,
+      format: ''
     });
   }
 
@@ -62,7 +64,8 @@ export class HomeComponent {
     this.http.post<GenerationResult>("api/sw-generator/url",
       JSON.stringify({
         url: this.urlForm.value.url,
-        openApi: this.urlForm.value.openApi
+        openApi: this.urlForm.value.openApi,
+        format: this.urlForm.value.format
       }),
       { headers: headers }).subscribe(result => {
         if (result.error !== null) {
@@ -103,7 +106,8 @@ export class HomeComponent {
     this.http.post<GenerationResult>("api/sw-generator/spec",
       JSON.stringify({
         text: this.specForm.value.text,
-        openApi: this.specForm.value.openApi
+        openApi: this.specForm.value.openApi,
+        format: this.specForm.value.format
       }), { headers: headers }).subscribe(result => {
         if (result.error !== null) {
           this.specDocError = this.getErrorMessage(result.error);

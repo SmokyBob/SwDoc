@@ -11,6 +11,11 @@
   <div class="custom-control custom-checkbox">
     <input type="checkbox" class="custom-control-input" id="openApi1" [attr.disabled]="urlDocInProgress ? '' : null" formControlName="openApi">
     <label class="custom-control-label" for="openApi1">OpenAPI 3.0 (experimental)</label>
+    
+  </div>
+  <div>
+    <input type="text" id="format1" name="format1" class="form-control" placeholder="" aria-label="format" [attr.disabled]="urlDocInProgress ? '' : null" formControlName="format" value="PDF">
+    <label class="custom-control-label" for="format1">HTML or PDF</label>
   </div>
   <div class="input-group form-group-element">
     <input class="btn btn-outline-secondary" type="submit" value="Generate" [attr.disabled]="urlDocInProgress ? '' : null" />
@@ -29,6 +34,10 @@
   <div class="custom-control custom-checkbox">
     <input type="checkbox" class="custom-control-input" id="openApi2" [attr.disabled]="specDocInProgress ? '' : null" formControlName="openApi">
     <label class="custom-control-label" for="openApi2">OpenAPI 3.0 (experimental)</label>
+  </div>
+  <div>
+    <input type="text" id="format2" name="format2" class="form-control" placeholder="" aria-label="format" [attr.disabled]="urlDocInProgress ? '' : null" formControlName="format" value="PDF">
+    <label class="custom-control-label" for="format2">HTML or PDF</label>
   </div>
   <div class="input-group form-group-element">
     <input class="btn btn-outline-secondary" type="submit" value="Generate" [attr.disabled]="specDocInProgress ? '' : null" />
