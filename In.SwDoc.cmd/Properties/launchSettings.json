@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "In.SwDoc.cmd": {
+      "commandName": "Project",
+      "commandLineArgs": "--xml \"D:\\Progetti\\SwaggerToDoc\\In.SwDoc.Generator.Test\\test.json\"  --output \"d:\\ciccioli.pdf\""
+    }
+  }
+}

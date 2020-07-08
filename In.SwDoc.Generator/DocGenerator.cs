@@ -122,82 +122,6 @@ namespace In.SwDoc.Generator
             }
         }
 
-        //public Stream ConvertJsonToPdf(string data, bool openApi)
-        //{
-        //    var adocName = Guid.NewGuid().ToString("N");
-        //    var pdfName = Guid.NewGuid().ToString("N");
-        //    var adocPath = Path.Combine(_tempDirectory, adocName);
-        //    var pdfPath = Path.Combine(_tempDirectory, pdfName);
-        //    try
-        //    {
-        //        using (var stream = ConvertJsonToAscii(data, openApi))
-        //        using (var file = File.Create(adocPath))
-        //        {
-        //            stream.CopyTo(file);
-        //        }
-
-        //        ConverAsciiToFormat(adocPath, pdfPath,"pdf");
-
-        //        File.Delete(adocPath);
-        //        var memory = new MemoryStream();
-        //        using (var pdf = File.OpenRead(pdfPath))
-        //        {
-        //            pdf.CopyTo(memory);
-        //        }
-
-        //        File.Delete(pdfPath);
-        //        memory.Position = 0;
-        //        return memory;
-        //    }
-        //    catch (DocumentGenerationException)
-        //    {
-        //        throw;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _log.Error("Unable to generate pdf document", e);
-        //        throw new DocumentGenerationException("Unable to generate ascii document", e);
-        //    }
-        //}
-        //public Stream ConvertJsonToHTML(string data, bool openApi)
-        //{
-        //    var adocName = Guid.NewGuid().ToString("N");
-        //    var pdfName = Guid.NewGuid().ToString("N");
-        //    var adocPath = Path.Combine(_tempDirectory, adocName);
-        //    var pdfPath = Path.Combine(_tempDirectory, pdfName);
-        //    try
-        //    {
-        //        using (var stream = ConvertJsonToAscii(data, openApi))
-        //        using (var file = File.Create(adocPath))
-        //        {
-        //            stream.CopyTo(file);
-        //        }
-
-        //        ConverAsciiToFormat(adocPath, pdfPath, "html");
-
-        //        File.Delete(adocPath);
-        //        var memory = new MemoryStream();
-        //        using (var pdf = File.OpenRead(pdfPath))
-        //        {
-        //            pdf.CopyTo(memory);
-        //        }
-
-        //        //File.Delete(pdfPath);
-        //        File.Move(pdfPath, pdfPath + ".html");
-        //        memory.Position = 0;
-        //        return memory;
-        //    }
-        //    catch (DocumentGenerationException)
-        //    {
-        //        throw;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _log.Error("Unable to generate pdf document", e);
-        //        throw new DocumentGenerationException("Unable to generate ascii document", e);
-        //    }
-        //}
-
         public void ConverJsonToAscii(string jsonPath, string asciiPath, bool openApi)
         {
             var cmd = $"/C java -jar \"{(openApi ? _openApiCli : _swaggerCli)}\" convert -i \"{jsonPath}\" -d \"{asciiPath}\"";
@@ -218,6 +142,11 @@ namespace In.SwDoc.Generator
         public void ConverAsciiToFormat(string asciiPath, string pdfPath, string outFormat = "pdf")
         {
             var cmd = $"/C asciidoctor -b \"{outFormat}\" -o \"{pdfPath}\" \"{asciiPath}\"";
+
+            if (outFormat == "pdf")
+            {
+                cmd = cmd.Replace("asciidoctor", "asciidoctor-pdf");
+            }
 
             var process = new Process();
             var startInfo = new ProcessStartInfo();
