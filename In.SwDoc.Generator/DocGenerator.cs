@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using log4net;
 using log4net.Repository.Hierarchy;
 
@@ -32,10 +34,14 @@ namespace In.SwDoc.Generator
             _log.Info("Start converting to ascii doc");
             var jsonName = Guid.NewGuid().ToString("N");
             var asciiName = Guid.NewGuid().ToString("N");
-            var jsonPath = Path.Combine(_tempDirectory, jsonName);
-            var asciiPath = Path.Combine(_tempDirectory, asciiName);
+            var fullTemp = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), _tempDirectory);
+            var jsonPath = Path.Combine(fullTemp, jsonName);
+            var asciiPath = Path.Combine(fullTemp, asciiName);
             try
             {
+                if (Directory.Exists(fullTemp) == false)
+                    Directory.CreateDirectory(fullTemp);
+
                 File.WriteAllText(jsonPath, data);
 
                 ConverJsonToAscii(jsonPath, asciiPath, openApi);
@@ -88,8 +94,9 @@ namespace In.SwDoc.Generator
         {
             var adocName = Guid.NewGuid().ToString("N");
             var pdfName = Guid.NewGuid().ToString("N");
-            var adocPath = Path.Combine(_tempDirectory, adocName);
-            var pdfPath = Path.Combine(_tempDirectory, pdfName);
+            var fullTemp = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), _tempDirectory);
+            var adocPath = Path.Combine(fullTemp, adocName);
+            var pdfPath = Path.Combine(fullTemp, pdfName);
             try
             {
                 using (var stream = ConvertJsonToAscii(data, openApi))
@@ -131,6 +138,7 @@ namespace In.SwDoc.Generator
             //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
             startInfo.Arguments = cmd;
+            startInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             process.StartInfo = startInfo;
             process.Start();
 
@@ -153,6 +161,7 @@ namespace In.SwDoc.Generator
             //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
             startInfo.Arguments = cmd;
+            startInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit();

@@ -31,12 +31,16 @@ namespace In.SwDoc.Controllers
             {
                 var request = WebRequest.Create(data.Url);
                 request.Method = "GET";
+                if (string.IsNullOrEmpty(data.Format))
+                {
+                    data.Format = "pdf";
+                }
                 using (var responce = request.GetResponse())
                 using (var stream = responce.GetResponseStream())
                 using (var reader = new StreamReader(stream))
                 {
                     var content = reader.ReadToEnd();
-                    var d = _generator.ConvertJsonToFormat(content, data.OpenApi,data.Format);
+                    var d = _generator.ConvertJsonToFormat(content, data.OpenApi,data.Format.ToLower());
                     var id = _storage.SaveDocument(d);
                     return Ok(new
                     {
@@ -77,7 +81,10 @@ namespace In.SwDoc.Controllers
         {
             try
             {
-                var d = _generator.ConvertJsonToFormat(data.Text, data.OpenApi,data.Format);
+                if (string.IsNullOrEmpty(data.Format)){
+                    data.Format = "pdf";
+                }
+                var d = _generator.ConvertJsonToFormat(data.Text, data.OpenApi,data.Format.ToLower());
                 var id = _storage.SaveDocument(d);
                 return Ok(new
                 {
@@ -105,11 +112,21 @@ namespace In.SwDoc.Controllers
 
         }
 
-        [HttpGet("document/{id}")]
-        public IActionResult DownloadDocument(string id)
+        [HttpGet("document/{id}/{format}")]
+        public IActionResult DownloadDocument(string id, string format)
         {
             var stream = _storage.GetDocument(id);
-            return File(stream, "application/pdf", "api-documentation.pdf");
+
+            if (string.IsNullOrEmpty(format))
+            {
+                format = "pdf";
+            }
+
+            if (format.ToLower() == "pdf")
+                return File(stream, "application/pdf", "api-documentation.pdf");
+            else
+                return File(stream, "text/html", "api-documentation.html");
+
         }
     }
 }

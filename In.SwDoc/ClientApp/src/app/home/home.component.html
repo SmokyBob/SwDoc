@@ -14,8 +14,9 @@
     
   </div>
   <div>
+    HTML or PDF
     <input type="text" id="format1" name="format1" class="form-control" placeholder="" aria-label="format" [attr.disabled]="urlDocInProgress ? '' : null" formControlName="format" value="PDF">
-    <label class="custom-control-label" for="format1">HTML or PDF</label>
+    <div class="suggestion">default: PDF</div>
   </div>
   <div class="input-group form-group-element">
     <input class="btn btn-outline-secondary" type="submit" value="Generate" [attr.disabled]="urlDocInProgress ? '' : null" />
@@ -23,7 +24,7 @@
 </form>
 <div *ngIf="urlDocInProgress">Generating...</div>
 <div *ngIf="urlDocError" class="error">{{urlDocError}}</div>
-<a *ngIf="urlDocId" href="api/sw-generator/document/{{urlDocId}}" download>Download</a>
+<a *ngIf="urlDocId" href="api/sw-generator/document/{{urlDocId}}/{{urlFormat}}" download>Download</a>
 
 <h2>Generate using json</h2>
 <p>Paste specification json:</p>
@@ -36,8 +37,9 @@
     <label class="custom-control-label" for="openApi2">OpenAPI 3.0 (experimental)</label>
   </div>
   <div>
+    HTML or PDF
     <input type="text" id="format2" name="format2" class="form-control" placeholder="" aria-label="format" [attr.disabled]="urlDocInProgress ? '' : null" formControlName="format" value="PDF">
-    <label class="custom-control-label" for="format2">HTML or PDF</label>
+    <div class="suggestion">default: PDF</div>
   </div>
   <div class="input-group form-group-element">
     <input class="btn btn-outline-secondary" type="submit" value="Generate" [attr.disabled]="specDocInProgress ? '' : null" />
@@ -45,4 +47,4 @@
 </form>
 <div *ngIf="specDocInProgress">Generating...</div>
 <div *ngIf="specDocError" class="error">{{specDocError}}</div>
-<a *ngIf="specDocId" href="api/sw-generator/document/{{specDocId}}" download>Download</a>
+<a *ngIf="specDocId" href="api/sw-generator/document/{{specDocId}}/{{specFormat}}" download>Download</a>

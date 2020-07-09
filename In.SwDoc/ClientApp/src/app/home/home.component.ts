@@ -14,11 +14,13 @@ export class HomeComponent {
   urlDocId;
   urlDocInProgress;
   urlDocError;
+  urlFormat;
 
   specForm;
   specDocId;
   specDocError;
   specDocInProgress;
+  specFormat;
   constructor(
     private http: HttpClient,
     private formBuilder: FormBuilder) {
@@ -60,6 +62,10 @@ export class HomeComponent {
     this.urlDocId = null;
     this.urlDocError = null;
     this.urlDocInProgress = true;
+    this.urlFormat = this.urlForm.value.format;
+    if (this.urlFormat == null) {
+      this.urlFormat = 'pdf';
+    }
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
     this.http.post<GenerationResult>("api/sw-generator/url",
       JSON.stringify({
@@ -68,6 +74,7 @@ export class HomeComponent {
         format: this.urlForm.value.format
       }),
       { headers: headers }).subscribe(result => {
+        
         if (result.error !== null) {
           this.urlDocError = this.getErrorMessage(result.error);
         } else {
@@ -102,6 +109,10 @@ export class HomeComponent {
     this.specDocId = null;
     this.specDocError = null;
     this.specDocInProgress = true;
+    this.specFormat = this.specForm.value.format;
+    if (this.specFormat == null) {
+      this.specFormat = 'pdf';
+    }
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
     this.http.post<GenerationResult>("api/sw-generator/spec",
       JSON.stringify({
@@ -109,6 +120,7 @@ export class HomeComponent {
         openApi: this.specForm.value.openApi,
         format: this.specForm.value.format
       }), { headers: headers }).subscribe(result => {
+        
         if (result.error !== null) {
           this.specDocError = this.getErrorMessage(result.error);
         } else {
